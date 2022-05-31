@@ -60,7 +60,7 @@ describe("TestPool1", () => {
                 await expect(testPool1.connect(user1).deposit([1])).to.be.revertedWith('NO TRANSFER APPROVED')
             })
         })
-        describe.only("success", () => {
+        describe("success", () => {
             it("should update the nftInfo", async () => {
                 const nftInfoBefore = await testPool1.nftInfos(1)
                 expect(nftInfoBefore.staker).to.equal(constants.AddressZero)
