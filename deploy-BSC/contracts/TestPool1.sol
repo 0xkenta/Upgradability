@@ -71,4 +71,11 @@ contract TestPool1 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
 
         emit Deposit(msg.sender, _tokenId);
     }
+
+    /// @notice return the staked token length of the user
+    /// @param _staker the address of the user
+    /// @return the length of the staked token 
+    function getStakingTokenLength(address _staker) external view returns (uint256) {
+        return nftIdsStaked[_staker].length;
+    } 
 }
