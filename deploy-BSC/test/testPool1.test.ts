@@ -52,16 +52,48 @@ describe("TestPool1", () => {
         beforeEach(async () => {
             await testPool1.initialize(mockNFT.address)
             await mockNFT.connect(user1).mint()  
+            await mockNFT.connect(user1).mint()  
+            await mockNFT.connect(user1).mint()  
         })
         describe("fail", () => {
             it("should revert if the token is not approved before the deposit", async () => {
                 await expect(testPool1.connect(user1).deposit([1])).to.be.revertedWith('NO TRANSFER APPROVED')
             })
         })
-        describe("success", () => {
+        describe.only("success", () => {
             it("should update the nftInfo", async () => {
+                const nftInfoBefore = await testPool1.nftInfos(1)
+                expect(nftInfoBefore.staker).to.equal(constants.AddressZero)
+                expect(nftInfoBefore.isStaked).to.equal(false)
+
                 await mockNFT.connect(user1).approve(testPool1.address, 1)
                 await testPool1.connect(user1).deposit([1])
+
+                const nftInfoAfter = await testPool1.nftInfos(1)
+                expect(nftInfoAfter.staker).to.equal(user1.address)
+                expect(nftInfoAfter.isStaked).to.equal(true)
+            })
+            it("should push the tokenId into the nftIdsStaked", async () => {
+                expect(await testPool1.getStakingTokenLength(user1.address)).to.equal(0)
+                await mockNFT.connect(user1).approve(testPool1.address, 1)
+                await testPool1.connect(user1).deposit([1])
+
+                expect(await testPool1.getStakingTokenLength(user1.address)).to.equal(1)
+
+                await mockNFT.connect(user1).approve(testPool1.address, 2)
+                await testPool1.connect(user1).deposit([2])
+
+                expect(await testPool1.getStakingTokenLength(user1.address)).to.equal(2)
+            })
+            it("should transfer the token from the user to the pool contract", async () => {
+                expect(await mockNFT.balanceOf(testPool1.address)).to.equal(0)
+                expect(await mockNFT.ownerOf(1)).to.equal(user1.address)
+
+                await mockNFT.connect(user1).approve(testPool1.address, 1)
+                await testPool1.connect(user1).deposit([1])
+
+                expect(await mockNFT.balanceOf(testPool1.address)).to.equal(1)
+                expect(await mockNFT.ownerOf(1)).to.equal(testPool1.address)
             })
         })
     })
