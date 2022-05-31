@@ -17,10 +17,6 @@ describe("TestPool1", () => {
     let user2: SignerWithAddress
     let user3: SignerWithAddress
 
-    let tokenId1: number
-    let tokenId2: number
-    let tokenId3: number
-
     beforeEach(async () => {
         [owner, user1, user2, user3] = await ethers.getSigners()
 
