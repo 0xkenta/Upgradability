@@ -1,4 +1,4 @@
-pragma solidity 0.8.11;
+pragma solidity 0.8.9;
 
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -70,49 +70,5 @@ contract TestPool1 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
         nftIdsStaked[msg.sender].push(_tokenId);
 
         emit Deposit(msg.sender, _tokenId);
-    }
-
-    /// @notice burn staked tokens
-    /// @param _tokenIds that the staker want to burn
-    function burn(uint256[] calldata _tokenIds) external nonReentrant {
-        for (uint256 i; i < _tokenIds.length; ) {
-            _burn(_tokenIds[i]);
-
-            unchecked {
-                ++i;
-            }
-        }
-    }
-
-    /// @notice internal burn function
-    /// @param _tokenId that the staker want to burn
-    function _burn(uint256 _tokenId) internal {
-        require(removeTokenId(_tokenId), 'NO STAKED TOKEN');
-
-        delete nftInfos[_tokenId];
-
-        nft.burn(_tokenId);
-
-    }
-
-    /// @notice try to delete a special tokenId from nftIdsStaked of msg.sender
-    /// @param _tokenId The ID of the staked token
-    /// @return true if delete tokenId from nftIdsStaked else false
-    function removeTokenId(uint256 _tokenId) internal returns (bool) {
-        uint256[] storage tokenIds = nftIdsStaked[msg.sender];
-        uint256 idsLength = tokenIds.length;
-
-        for (uint256 index; index < idsLength; ) {
-            if (tokenIds[index] == _tokenId) {
-                tokenIds[index] = tokenIds[idsLength - 1];
-                tokenIds.pop();
-
-                return true;
-            }
-            unchecked {
-                ++index;
-            }
-        }
-        return false;
     }
 }
