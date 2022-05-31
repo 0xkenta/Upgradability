@@ -50,14 +50,14 @@ describe("TestPool1", () => {
 
     describe("deposit()", () => {
         beforeEach(async () => {
+            await testPool1.initialize(mockNFT.address)
             await mockNFT.connect(user1).mint()  
         })
-        // describe("fail", () => {
-        //     it("should revert if the token is not approved before the deposit", async () => {
-        //         // await expect(testPool1.connect(user1).deposit([1])).to.be.revertedWith('NO TRANSFER APPROVED')
-        //         await testPool1.deposit([1])
-        //     })
-        // })
+        describe("fail", () => {
+            it("should revert if the token is not approved before the deposit", async () => {
+                await expect(testPool1.connect(user1).deposit([1])).to.be.revertedWith('NO TRANSFER APPROVED')
+            })
+        })
         describe("success", () => {
             it("should update the nftInfo", async () => {
                 await mockNFT.connect(user1).approve(testPool1.address, 1)
