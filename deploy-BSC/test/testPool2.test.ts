@@ -56,7 +56,7 @@ describe("TestPool2", () => {
         })
 
         describe("success", () => {
-            it("should decrease the length of the tokens", async () => {
+            it("should decrease the length of the staked tokens", async () => {
                 expect(await testPool2.getStakingTokenLength(user1.address)).to.equal(2)
     
                 await testPool2WithUser1.burn([1])
