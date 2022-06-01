@@ -25,10 +25,11 @@ contract TestPool3 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
 
     // nft contract
     ERC721BurnableUpgradeable public nft;
-
-    uint256 public totalStaked;
+    
+    address public treasury;
 
     event Deposit(address indexed user, uint256 indexed tokenId);
+    event TreasuryUpdated(address previousTreasury, address newTreasury);
 
     /// @notice initialize this contract
     /// @param _nft the address of the NFT contract
@@ -70,8 +71,6 @@ contract TestPool3 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
 
         nftIdsStaked[msg.sender].push(_tokenId);
 
-        ++totalStaked;
-
         emit Deposit(msg.sender, _tokenId);
     }
 
@@ -93,8 +92,6 @@ contract TestPool3 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
         require(removeTokenId(_tokenId), 'NO STAKED TOKEN');
 
         delete nftInfos[_tokenId];
-
-        --totalStaked;
 
         nft.burn(_tokenId);
     }
@@ -125,5 +122,13 @@ contract TestPool3 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
             }
         }
         return false;
+    }
+
+    function setTreasury(address _newTreasury) external onlyOwner {
+        require(_newTreasury != address(0), "EMPTY ADDRESS");
+        address previousTreasury = treasury;
+        treasury = _newTreasury;
+
+        emit TreasuryUpdated(previousTreasury, _newTreasury);
     }
 }
