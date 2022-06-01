@@ -22,13 +22,14 @@ describe("proxy", () => {
         await test1.updateName("Alice")
         expect(await test1.getName()).to.equal("Alice")
     })
-    it("should set a new proxy admin owner", async () => {
-        const adminProxyOwnerBefore = await (await upgrades.admin.getInstance()).owner()
-        expect(adminProxyOwnerBefore).to.equal(owner.address)
+    // caution: https://forum.openzeppelin.com/t/transferproxyadminownership-results-in-ownable-caller-is-not-the-owner/4927/2
+    // it("should set a new proxy admin owner", async () => {
+    //     const adminProxyOwnerBefore = await (await upgrades.admin.getInstance()).owner()
+    //     expect(adminProxyOwnerBefore).to.equal(owner.address)
         
-        await upgrades.admin.transferProxyAdminOwnership(nextOwner.address)
+    //     await upgrades.admin.transferProxyAdminOwnership(nextOwner.address)
         
-        const adminProxyOwnerAfter = await (await upgrades.admin.getInstance()).owner()
-        expect(adminProxyOwnerAfter).to.equal(nextOwner.address)
-    })
+    //     const adminProxyOwnerAfter = await (await upgrades.admin.getInstance()).owner()
+    //     expect(adminProxyOwnerAfter).to.equal(nextOwner.address)
+    // })
 })
