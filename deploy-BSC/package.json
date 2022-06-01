@@ -10,7 +10,6 @@
     "email": "bugs@sushi.com"
   },
   "license": "MIT",
-  "author": "Matthew Lilley <hello@matthewlilley.com>",
   "scripts": {
     "build": "hardhat compile",
     "console": "hardhat console",
