@@ -11,6 +11,7 @@ import "hardhat-gas-reporter";
 import "hardhat-spdx-license-identifier";
 import "hardhat-watcher";
 import "solidity-coverage";
+import '@openzeppelin/hardhat-upgrades';
 
 import { HardhatUserConfig, task } from "hardhat/config";
 
