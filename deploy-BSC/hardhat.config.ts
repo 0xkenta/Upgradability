@@ -51,11 +51,11 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
-  gasReporter: {
-    coinmarketcap: process.env.COINMARKETCAP_API_KEY,
-    currency: "USD",
-    enabled: process.env.REPORT_GAS === "true",
-  },
+  // gasReporter: {
+  //   coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+  //   currency: "USD",
+  //   enabled: process.env.REPORT_GAS === "true",
+  // },
   namedAccounts: {
     deployer: {
       default: 0,
@@ -85,31 +85,18 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       tags: ["test", "local"],
     },
-    ethereum: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
-      accounts,
-      chainId: 1,
-      live: true,
-      saveDeployments: true,
-      tags: ["mainnet"],
-      hardfork: process.env.CODE_COVERAGE ? "berlin" : "london",
+    testnet: {
+      url: "https://data-seed-prebsc-1-s1.binance.org:8545",
+      chainId: 97,
+      gasPrice: 20000000000,
+      accounts: {mnemonic: process.env.MNEMONIC}
     },
-    ropsten: {
-      url: `https://ropsten.infura.io/v3/${process.env.INFURA_API_KEY}`,
-      accounts,
-      chainId: 3,
-      live: true,
-      saveDeployments: true,
-      tags: ["staging"],
-    },
-    goerli: {
-      url: `https://goerli.infura.io/v3/${process.env.INFURA_API_KEY}`,
-      accounts,
-      chainId: 5,
-      live: true,
-      saveDeployments: true,
-      tags: ["staging"],
-    },
+    mainnet: {
+      url: "https://bsc-dataseed.binance.org/",
+      chainId: 56,
+      gasPrice: 20000000000,
+      accounts: {mnemonic: process.env.MNEMONIC}
+    }
   },
   preprocess: {
     eachLine: removeConsoleLog(
@@ -126,10 +113,10 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  tenderly: {
-    project: String(process.env.TENDERLY_PROJECT),
-    username: String(process.env.TENDERLY_USERNAME),
-  },
+  // tenderly: {
+  //   project: String(process.env.TENDERLY_PROJECT),
+  //   username: String(process.env.TENDERLY_USERNAME),
+  // },
   typechain: {
     outDir: "types",
     target: "ethers-v5",
