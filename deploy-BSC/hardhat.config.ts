@@ -89,13 +89,13 @@ const config: HardhatUserConfig = {
       url: "https://data-seed-prebsc-1-s1.binance.org:8545",
       chainId: 97,
       gasPrice: 20000000000,
-      accounts: {mnemonic: process.env.MNEMONIC}
+      accounts,
     },
     mainnet: {
       url: "https://bsc-dataseed.binance.org/",
       chainId: 56,
       gasPrice: 20000000000,
-      accounts: {mnemonic: process.env.MNEMONIC}
+      accounts,
     }
   },
   preprocess: {
@@ -105,7 +105,7 @@ const config: HardhatUserConfig = {
     ),
   },
   solidity: {
-    version: "0.8.9",
+    version: "0.8.2",
     settings: {
       optimizer: {
         enabled: true,
