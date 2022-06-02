@@ -5,9 +5,12 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 
 // @title NFT staking Pool 
 contract TestPool3 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable, ERC721HolderUpgradeable {
+    using SafeERC20Upgradeable for IERC20Upgradeable;
     /// @notice the information of each staked Token
     /// staker the address of the token staker
     /// power the amount of power that the token possesses
@@ -30,6 +33,7 @@ contract TestPool3 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
 
     event Deposit(address indexed user, uint256 indexed tokenId);
     event TreasuryUpdated(address previousTreasury, address newTreasury);
+    event ERC20Recovered(address recipient, uint256 amount);
 
     /// @notice initialize this contract
     /// @param _nft the address of the NFT contract
@@ -130,5 +134,15 @@ contract TestPool3 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradea
         treasury = _newTreasury;
 
         emit TreasuryUpdated(previousTreasury, _newTreasury);
+    }
+
+    function recoverERC20(address _tokenAddress, uint256 _amount) external onlyOwner {
+        require(_tokenAddress != address(0), "EMPTY ADDRESS");
+        require(_amount != 0, "AMOUNT 0");
+
+        address recipient = treasury;
+
+        IERC20Upgradeable(_tokenAddress).safeTransfer(recipient, _amount);
+        emit ERC20Recovered(recipient, _amount);
     }
 }
